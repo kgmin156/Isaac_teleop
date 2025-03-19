@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<robot name="panda_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="base"/>
+  <link name="hand_rot"/>
+  <link name="hand_rot_x"/>
+  <link name="hand_rot_y"/>
+  <link name="hand_x"/>
+  <link name="hand_y"/>
+
+  <joint name="hand_joint_x" type="prismatic">
+    <parent link="base"/>
+    <child link="hand_x"/>
+    <axis xyz="1 0 0"/>
+    <!-- <dynamics damping="40" stiffness="400"/> -->
+    <limit effort="20" lower="-2" upper="2" velocity="0.1"/>
+    <mimic joint="hand_joint"/>
+  </joint>
+
+  <joint name="hand_joint_y" type="prismatic">
+    <parent link="hand_x"/>
+    <child link="hand_y"/>
+    <axis xyz="0 1 0"/>
+    <!-- <dynamics damping="40" stiffness="400"/> -->
+    <limit effort="20" lower="-2" upper="2" velocity="0.1"/>
+    <mimic joint="hand_joint"/>
+  </joint>
+
+  <joint name="hand_joint" type="prismatic">
+    <parent link="hand_y"/>
+    <child link="hand_rot_x"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="40" stiffness="400"/>
+    <limit effort="20" lower="-2" upper="2" velocity="0.1"/>
+  </joint>
+
+  <joint name="hand_rotating" type="revolute">
+    <parent link="hand_rot_x"/>
+    <child link="hand_rot_y" />
+    <axis xyz="1 0 0"/>
+    <!-- <dynamics damping="40" stiffness="400"/> -->
+    <limit effort="20" lower="-10" upper="10" velocity="0.1"/>
+  </joint>
+
+  <joint name="hand_rotating_x" type="revolute">
+    <parent link="hand_rot_y"/>
+    <child link="hand_rot" />
+    <axis xyz="0 1 0"/>
+    <!--dynamics damping="0.800"/-->
+    <!-- <dynamics damping="40" stiffness="400"/> -->
+
+    <limit effort="20" lower="-10" upper="10" velocity="0.1"/>
+    <!-- <mimic joint="hand_rotating"/> -->
+  </joint>
+
+  <joint name="hand_rotating_y" type="revolute">
+    <parent link="hand_rot"/>
+    <child link="hand" />
+    <axis xyz="0 0 1"/>
+    <!--dynamics damping="0.800"/-->
+    <!-- <dynamics damping="40" stiffness="400"/> -->
+    <limit effort="20" lower="-10" upper="10" velocity="0.1"/>
+    <!-- <mimic joint="hand_rotating"/> -->
+  </joint>
+
+
+  <link name="hand">
+    <visual>
+      <origin rpy="1.5707963267 0 1.5707963267" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/visual/hand.obj"/>
+      </geometry>
+    </visual>
+    <!-- <collision>
+      <origin rpy="0 0 1.5707963267" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/collision/hand.obj"/>
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin rpy="0 0 1.5707963267" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/collision/hand.obj"/>
+      </geometry>
+      <!-- <sdf resolution="256"/> -->
+    </collision>
+  </link>
+  
+
+  <link name="right_finger">
+    <visual>
+      <origin rpy="1.5707963267 0 4.71239" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/visual/finger.obj"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+    <origin rpy="1.5707963267 0 4.71239" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/visual/finger.obj"/>
+      </geometry>
+      <!-- <sdf resolution="256"/> -->
+    </collision>
+  </link>
+
+  <link name="left_finger">
+    <visual>
+      <origin rpy="1.5707963267 0 1.5707963267" xyz="0.0 0.0 0.0"/>
+      <geometry>  
+        <mesh filename="package://franka_description/meshes/visual/finger.obj"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267 0 1.5707963267" xyz="0.0 0 0.0"/>
+      <geometry>
+        <mesh filename="package://franka_description/meshes/visual/finger.obj"/>
+      </geometry>
+      <!-- <sdf resolution="256"/> -->
+    </collision>
+  </link>
+  
+
+  <joint name="finger_joint_right" type="prismatic">
+    <parent link="hand"/>
+    <child link="right_finger"/>
+    <origin rpy="0 0 0" xyz="0.0425 0 0.0584"/>
+    <axis xyz="1 0 0"/>
+    <!-- <dynamics damping="40" stiffness="800"/> -->
+
+    <limit effort="70" lower="-0.0425" upper="0.0" velocity="0.05"/>
+    <mimic joint="finger_joint_left"/>
+  </joint>
+  
+  <joint name="finger_joint_left" type="prismatic">
+    <parent link="hand"/>
+    <child link="left_finger"/>
+    <origin rpy="0 0 0" xyz="-0.0425 0 0.0584"/>
+    <axis xyz="1 0 0"/>
+    <!-- <dynamics damping="40" stiffness="800"/> -->
+
+    <limit effort="70" lower="0.0" upper="0.0425" velocity="0.05"/>
+  </joint>
+
+
+  
+  
+  
+ 
+</robot>
+  
